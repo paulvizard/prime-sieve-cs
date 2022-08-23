@@ -8,20 +8,20 @@ namespace PrimeSieve
     /// </summary>
     public class PrimeSieve
     {
-        UInt32[] m_primes;
+        private UInt32[] _primes;
 
-        int m_maxPrimes;
+        int _maxPrimes;
 
         /// <summary>
         /// Removes a number for the sieve
         /// </summary>
         /// <param name="number"></param>
-        void RemoveNumber(int number)
+        private void RemoveNumber(int number)
         {
             int byteNumber = number / 32;
             int bitNumber = number % 32;
-            uint one = 1;
-            m_primes[byteNumber] |= one << bitNumber;
+            const uint one = 1;
+            _primes[byteNumber] |= one << bitNumber;
         }
 
         /// <summary>
@@ -29,21 +29,21 @@ namespace PrimeSieve
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        bool CheckNumber(int number)
+        private bool CheckNumber(int number)
         {
             int byteNumber = number / 32;
             int bit = number % 32;
-            return ((m_primes[byteNumber] >> bit) & 0x1) == 1;
+            return ((_primes[byteNumber] >> bit) & 0x1) == 1;
         }
 
         public void Test()
         {
             // Create a bunch of bits
-            m_primes = new UInt32[11];
+            _primes = new UInt32[11];
             for (int i = 1; i < 10 * 32; i++)
             {
                 RemoveNumber(i);
-                Console.WriteLine($"{i} = {m_primes[0]:X}");
+                Console.WriteLine($"{i} = {_primes[0]:X}");
                 if (!CheckNumber(i))
                 {
                     Console.WriteLine($"Failed at bit {i}");
@@ -56,7 +56,7 @@ namespace PrimeSieve
         /// </summary>
         /// <param name="number"></param>
         /// <param name="max"></param>
-        void ProcessNumber(int number, int max)
+        private void ProcessNumber(int number, int max)
         {
             if (CheckNumber(number))
             {
@@ -80,10 +80,10 @@ namespace PrimeSieve
         public void RunSieve(int maxNumber)
         {
             Console.WriteLine($"Looking for primes below {maxNumber} with C#");
-            m_maxPrimes = maxNumber;
+            _maxPrimes = maxNumber;
 
             // Create a bunch of bits
-            m_primes = new UInt32[maxNumber / 32 + 1];
+            _primes = new UInt32[maxNumber / 32 + 1];
 
             // Remove 1
             RemoveNumber(1);
@@ -121,7 +121,7 @@ namespace PrimeSieve
         public int PrintPrimes()
         {
             int found = 0;
-            for (int i = 1; i < m_maxPrimes; i++)
+            for (int i = 1; i < _maxPrimes; i++)
             {
                 var bit = CheckNumber(i);
                 if (!bit)
